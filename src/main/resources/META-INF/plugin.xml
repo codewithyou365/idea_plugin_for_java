@@ -1,0 +1,123 @@
+<!-- Copyright 2000-2023 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+
+<idea-plugin>
+
+    <!-- Unique id for this plugin. Must stay constant for the life of the plugin. -->
+    <id>org.codewithyou365.easyjava</id>
+
+    <!-- Text to display as name on Settings | Plugin page -->
+    <name>Easy Java</name>
+
+    <!-- Product and plugin compatibility requirements -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.java</depends>
+
+    <!-- Text to display as description on Settings | Plugin page -->
+    <description>
+        <![CDATA[
+<strong>使用说明</strong>
+<ul>
+<li>
+    <p>功能 1
+        <kbd>.full</kbd>
+    </p>
+</li>
+<li>
+    <img src="https://media.githubusercontent.com/media/codewithyou365/idea_plugin_for_java/refs/heads/main/src/main/resources/gif/AutoFullSqlSelect.gif" alt="SQL 自动补全" width="748" height="361"/>
+    <p>
+        <strong>使用场景：</strong>
+        在项目中大量使用 SQL 进行查询时，通常会使用 <code>SELECT *</code>，但这样不能做到精准查询，导致性能下降。
+    </p>
+    <p>
+        <strong>原理：</strong>
+        当声明 <code>String sOrder</code> 时，程序会自动检查下文所有 <code>order</code> 对象的 <code>get*</code> 方法，并根据使用情况为 <code>sOrder</code> 赋值。其中 <code>s</code> 代表 <code>select</code>。
+    </p>
+</li>
+
+<li>
+    <p>功能 2
+        <kbd>.autoCheckState</kbd>
+    </p>
+</li>
+<li>
+    <img src="https://media.githubusercontent.com/media/codewithyou365/idea_plugin_for_java/refs/heads/main/src/main/resources/gif/CheckState.gif" alt="状态检查" width="748" height="361"/>
+    <p>
+        <strong>使用场景：</strong>
+        对状态推进进行检查，对于 声明的状态推进逻辑 和 实现的状态推进逻辑，这两者可能存在不一致的情况，需要进行自动检查。
+    </p>
+    <p>
+        <strong>原理：</strong>
+        使用 <code>.autoCheckState</code> 命令后，会将代码中的实现的推进逻辑转换为字符串，并调用 <code>checkState</code> 方法进行校验。其中checkState方法需要使用者自己实现。
+    </p>
+</li>
+
+<li>
+    <p>功能 3
+        <kbd>Call Get</kbd>
+    </p>
+</li>
+<li>
+    <img src="https://media.githubusercontent.com/media/codewithyou365/idea_plugin_for_java/refs/heads/main/src/main/resources/gif/CallRemoteAction.gif" alt="调用远程接口" width="748" height="361"/>
+    <p>
+        <strong>使用场景：</strong>
+        在 Spring 项目部署到开发环境后，你希望将开发环境的某个接口的流量引导到本地进行调试。你可以通过该功能完成流量引导的配置。
+    </p>
+    <p>
+        <strong>转发方案：(不是插件本身功能)</strong>
+        <ul>
+            <li>
+                <strong>nacos：</strong>
+                会将所有流量引导至本地。
+            </li>
+            <li>
+                <strong>kt-connect：</strong>
+                需要修改客户端以指定 <code>VERSION</code>。
+            </li>
+            <li>
+                <strong>自己定义转发：</strong>
+                但在大多数情况下，我们只关注某一个接口的调试，因此更推荐在网关中实现流量转发方法以及配置接口。
+            </li>
+        </ul>
+    </p>
+    <p>
+        <strong>原理：</strong>
+        该功能会根据当前 Run Configuration 的环境变量 <code>__CALL_TEMPLATE</code>（如 <code>https://x.com/{path}</code>），
+        自动替换 <code>{path}</code> 为 Spring Controller 中的 Path，并发送 GET 请求。
+    </p>
+</li>
+
+<li>
+    <p>更多详情，请访问 GitHub：</p>
+    <p>
+        <a href="https://github.com/codewithyou365/idea_plugin_for_java">https://github.com/codewithyou365/idea_plugin_for_java</a>
+    </p>
+</li>
+</ul>
+
+    ]]>
+    </description>
+    <change-notes>
+        <![CDATA[
+      <ul>
+        <li><b>1.0.0</b> Release 2025/2/17</li>
+      </ul>
+    ]]>
+    </change-notes>
+
+    <vendor email="codewithyou365@gmail.com" url="https://github.com/codewithyou365">heran</vendor>
+    <idea-version since-build="191"/>
+    <extensions defaultExtensionNs="com.intellij">
+        <codeInsight.template.postfixTemplateProvider language="JAVA"
+                                                      implementationClass="org.codewithyou365.easyjava.PointTipProvider"/>
+    </extensions>
+
+    <actions>
+        <action id="org.codewithyou365.easyjava.CallRemoteAction"
+                class="org.codewithyou365.easyjava.CallRemoteAction"
+                text="Call Get"
+                description="Call Get">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>

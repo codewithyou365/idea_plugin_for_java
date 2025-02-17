@@ -1,0 +1,15 @@
+<svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background with a colorful gradient -->
+    <defs>
+        <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#05559e; stop-opacity:1"/>
+            <stop offset="50%" style="stop-color:#fa50c4; stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:#aaff00; stop-opacity:1"/>
+        </linearGradient>
+    </defs>
+    <rect width="80" height="80" fill="url(#bgGradient)"/>
+
+    <!-- Text -->
+    <text x="20%" y="40%" font-family="Arial" font-size="16" fill="black" font-weight="bold">E a s y</text>
+    <text x="20%" y="72%" font-family="Arial" font-size="16" fill="black" font-weight="bold">J a v a</text>
+</svg>
