@@ -15,6 +15,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.Map;
 
@@ -133,9 +134,9 @@ public class CallRemoteAction extends AnAction {
 
         // 确定最终的 URL
         if (!classUrl.isEmpty()) {
-            return classUrl + methodUrl;
+            return Paths.get(classUrl, methodUrl).toString();
         } else {
-            return interfaceUrl + methodUrl;
+            return Paths.get(interfaceUrl, methodUrl).toString();
         }
     }
 

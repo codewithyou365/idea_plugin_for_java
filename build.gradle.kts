@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "org.codewithyou365.sdk"
-version = "1.0.0"
+version = "1.0.1"
 
 repositories {
   mavenCentral()
@@ -30,7 +30,7 @@ tasks {
   patchPluginXml {
     version.set("${project.version}")
     sinceBuild.set("223")
-    untilBuild.set("241.*")
+    untilBuild.set("251.*")
   }
 }
 
