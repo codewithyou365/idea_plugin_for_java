@@ -44,8 +44,13 @@
     - **自己定义转发：** 但在大多数情况下，我们只关注某一个接口的调试，因此更推荐在网关中实现流量转发方法以及配置接口。
 
   **原理：**
-  该功能会根据当前 Run Configuration 的环境变量 `__CALL_TEMPLATE`（如 `https://x.com/{path}` ），
-  自动替换 `{path}` 为 Spring Controller 中的 Path，并发送 GET 请求。
+  该功能将根据当前的 Run Configuration 中的两个环境变量，自动生成并发送 GET 请求，例如：
+  - 环境变量 __CALL_TEMPLATE: https://x.com/{path} 
+  - 环境变量 __CALL_TEMPLATE_HEADER: X-Api-Path:{path}
+   
+  **功能会自动解析 Spring Controller 中的路径，替换模板中的 {path} 占位符，并使用替换后的 URL 发起 GET 请求。**
+  **假设解析出的 {path} 为 user/list，请请求效果类似如下 cURL 命令：**
+  - curl -X GET "https://x.com/user/list" -H "X-Api-Path: user/list"
 
 ---
 

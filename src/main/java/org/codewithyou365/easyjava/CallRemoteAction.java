@@ -9,6 +9,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URI;
@@ -17,6 +18,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Paths;
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -41,11 +43,34 @@ public class CallRemoteAction extends AnAction {
             return;
         }
         String url = callTemplate.replace("{path}", path);
-        Messages.showMessageDialog("curl " + url + "\n\n" + call(url), "Result", Messages.getInformationIcon());
+        String callTemplateHeader = getEnvValue(event, "__CALL_TEMPLATE_HEADER");
+        Map<String, String> headers = new HashMap<>();
+        if (StringUtils.isNotBlank(callTemplateHeader)) {
+            callTemplateHeader = callTemplateHeader.replace("{path}", path);
+            String[] kv = callTemplateHeader.split(":", 2);
+            if (kv.length == 2) {
+                headers.put(kv[0], kv[1]);
+            }
+        }
+        StringBuilder headerString = new StringBuilder();
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            headerString.append(" -H \"").append(entry.getKey()).append(": ").append(entry.getValue()).append("\"");
+        }
+        String curlCmd = "curl -X GET \"" + url + "\"" + headerString;
+        Messages.showMessageDialog(curlCmd + "\n\n" + call(url, headers), "Result", Messages.getInformationIcon());
     }
 
-    String call(String url) {
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().timeout(Duration.ofSeconds(1)).build();
+    String call(String url, Map<String, String> header) {
+        HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .timeout(Duration.ofSeconds(1));
+
+        if (header != null) {
+            header.forEach(requestBuilder::header);
+        }
+
+        HttpRequest request = requestBuilder.build();
         try {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             return response.body();

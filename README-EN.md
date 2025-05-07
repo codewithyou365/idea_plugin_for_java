@@ -43,8 +43,13 @@
   - **Define by self:** However, in most cases, only a specific API needs debugging. Thus, it is more recommended to implement traffic forwarding methods and configuration interfaces in the gateway.
 
   **How It Works:**
-  This feature uses the environment variable __CALL_TEMPLATE from the current Run Configuration (e.g., https://x.com/{path} ), automatically replaces {path} with the corresponding Spring Controller path, and sends a GET request.
-
+  This feature automatically generates and sends a GET request based on two environment variables defined in the current Run Configuration. For example:
+  -	Environment variable __CALL_TEMPLATE: https://x.com/{path}
+  -	Environment variable __CALL_TEMPLATE_HEADER: X-Api-Path:{path}
+  
+  **The feature will automatically parse the path from the Spring Controller, replace the {path} placeholder in the templates, and send a GET request using the resulting URL.**
+  **Assuming the parsed {path} is user/list, the resulting request would be equivalent to the following cURL command:**
+  - curl -X GET "https://x.com/user/list" -H "X-Api-Path: user/list"
 ---
 
 ## Others:

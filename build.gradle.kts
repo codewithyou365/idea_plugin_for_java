@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "org.codewithyou365.sdk"
-version = "1.0.1"
+version = "1.0.2"
 
 repositories {
   mavenCentral()

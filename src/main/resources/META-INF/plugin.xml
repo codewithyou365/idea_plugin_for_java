@@ -80,11 +80,17 @@
             </li>
         </ul>
     </p>
-    <p>
-        <strong>原理：</strong>
-        该功能会根据当前 Run Configuration 的环境变量 <code>__CALL_TEMPLATE</code>（如 <code>https://x.com/{path}</code>），
-        自动替换 <code>{path}</code> 为 Spring Controller 中的 Path，并发送 GET 请求。
-    </p>
+    <p><strong>原理：</strong></p>
+    <p>该功能将根据当前的 Run Configuration 中的两个环境变量，自动生成并发送 GET 请求，例如：</p>
+    <ul>
+      <li>环境变量 <strong>__CALL_TEMPLATE</strong>: https://x.com/{path}</li>
+      <li>环境变量 <strong>__CALL_TEMPLATE_HEADER</strong>: X-Api-Path:{path}</li>
+    </ul>
+    <p><strong>功能会自动解析 Spring Controller 中的路径，替换模板中的 {path} 占位符，并使用替换后的 URL 发起 GET 请求。</strong></p>
+    <p><strong>假设解析出的 {path} 为 user/list，请求效果类似如下 cURL 命令：</strong></p>
+    <ul>
+      <li><code>curl -X GET "https://x.com/user/list" -H "X-Api-Path: user/list"</code></li>
+    </ul>
 </li>
 
 <li>
@@ -102,6 +108,7 @@
       <ul>
         <li><b>1.0.0</b> Release 2025/2/17</li>
         <li><b>1.0.1</b> Compatibility with 251.*</li>
+        <li><b>1.0.2</b> Improved Remote Call Action</li>
       </ul>
     ]]>
     </change-notes>
